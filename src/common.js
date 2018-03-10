@@ -1,18 +1,13 @@
-// require SCSS
-// console.log('./scss/main.scss');
-// import './scss/main.scss';
-
-
 // require polyfill
 import 'babel-polyfill';
+// import 'element-closest';
+// import 'whatwg-fetch';
+
 
 
 // require scripts
 
 
+
 // require app component
-
-
-
-console.log('test');
- [[[]]]
+import './components/app.js';

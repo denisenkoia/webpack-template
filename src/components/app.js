@@ -1,8 +1,9 @@
 import Vue from 'vue';
-import App from './app.vue'
+import App from './app.vue';
 
 new Vue({
     el: '#app',
-    components: {skodaDecember},
-    template: '<skodaDecember></skodaDecember>'
+    render: (createElement) => {
+        return createElement(App);
+    }
 });
