@@ -1,7 +1,6 @@
 // ---- mixin ---- //
 
-@mixin font ( $size, $height, $spacing ) {
+@mixin font ( $size, $height ) {
 	font-size: $size;
-  	line-height: $height;
-  	letter-spacing: $spacing;
+	line-height: $height;
 }

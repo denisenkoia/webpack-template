@@ -1,13 +1,20 @@
 // require polyfill
 import 'babel-polyfill';
-// import 'element-closest';
-// import 'whatwg-fetch';
 
 
 
 // require scripts
+import './js/_newScript';
 
 
 
 // require app component
-import './components/app.js';
+import Vue from 'vue';
+import App from './components/app.vue';
+
+new Vue({
+    el: '#app',
+    render: (createElement) => {
+        return createElement(App);
+    }
+});
