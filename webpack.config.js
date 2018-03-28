@@ -1,9 +1,13 @@
 const path = require('path');
+const webpack = require("webpack");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = {
+const _production = ( process.env.NODE_ENV === 'production' ) ? true : false;
+
+
+const webpackConfig = {
     cache: true,
-    devtool: 'source-map',
+    devtool: ( _production ) ? 'none' : 'source-map',
     entry: ['./src/common.js', './src/scss/main.scss'],
     output: {
         path: path.resolve(__dirname, './src'),
@@ -26,41 +30,6 @@ module.exports = {
                 use: ['babel-loader']
             },
             {
-                test: /\.scss$/,
-                exclude: /main\.scss/,
-                use: [
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            url: false,
-                            minimize: false,
-                            sourceMap: true
-                        }
-                    },
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            sourceMap: true,
-                            plugins: [
-                                require('autoprefixer')({
-                                    remove: false,
-                                    browsers: ['last 50 versions']
-                                })
-                            ]
-                        }
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }
-                ]
-            },
-            {
                 test: /main\.scss/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
@@ -69,14 +38,14 @@ module.exports = {
                             loader: 'css-loader',
                             options: {
                                 url: false,
-                                minimize: false,
-                                sourceMap: true
+                                minimize: ( _production ) ? true : false,
+                                sourceMap: ( _production ) ? false : true,
                             }
                         },
                         {
                             loader: 'postcss-loader',
                             options: {
-                                sourceMap: true,
+                                sourceMap: ( _production ) ? false : true,
                                 plugins: [
                                     require('autoprefixer')({
                                         remove: false,
@@ -88,7 +57,7 @@ module.exports = {
                         {
                             loader: 'sass-loader',
                             options: {
-                                sourceMap: true
+                                sourceMap: ( _production ) ? false : true
                             }
                         }
                     ]
@@ -110,14 +79,30 @@ module.exports = {
                         loader: 'markup-inline-loader'
                     }
                 ]
-            },
-            {
-                test: /\.html$/,
-                use: ['html-loader', 'markup-inline-loader']
             }
         ]
+    },
+    resolve: {
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
     },
     plugins: [
         new ExtractTextPlugin('assets/css/main.css')
     ]
 };
+
+
+// Production
+if ( _production ) {
+    webpackConfig.plugins = ( webpackConfig.plugins || [] ).concat([
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin()
+    ])
+}
+
+module.exports = webpackConfig
