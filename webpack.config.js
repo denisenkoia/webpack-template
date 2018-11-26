@@ -1,13 +1,17 @@
 const path = require('path');
 const webpack = require("webpack");
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const _production = ( process.env.NODE_ENV === 'production' ) ? true : false;
 
 
 const webpackConfig = {
+    mode: 'development',
     cache: true,
-    devtool: ( _production ) ? 'none' : 'source-map',
+    devtool: 'source-map',
     entry: ['./src/common.js', './src/scss/main.scss'],
     output: {
         path: path.resolve(__dirname, './src'),
@@ -31,37 +35,66 @@ const webpackConfig = {
             },
             {
                 test: /main\.scss/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                url: false,
-                                minimize: ( _production ) ? true : false,
-                                sourceMap: ( _production ) ? false : true,
-                            }
-                        },
-                        {
-                            loader: 'postcss-loader',
-                            options: {
-                                sourceMap: ( _production ) ? false : true,
-                                plugins: [
-                                    require('autoprefixer')({
-                                        remove: false,
-                                        browsers: ['last 50 versions']
-                                    })
-                                ]
-                            }
-                        },
-                        {
-                            loader: 'sass-loader',
-                            options: {
-                                sourceMap: ( _production ) ? false : true
-                            }
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader
+                    },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
                         }
-                    ]
-                })
+                    },
+                    // {
+                    //     loader: 'postcss-loader',
+                    //     options: {
+                    //         plugins: [
+                    //             require("autoprefixer")({
+                    //                 browsers: ["ie >= 10", "last 50 version"]
+                    //             })
+                    //         ]
+                    //     }
+                    // },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }
+                ],
+                // use: MiniCssExtractPlugin.loader,
+
+                // use: ExtractTextPlugin.extract({
+                //     fallback: 'style-loader',
+                //     use: [
+                //         {
+                //             loader: 'css-loader',
+                //             options: {
+                //                 url: false,
+                //                 minimize: ( _production ) ? true : false,
+                //                 sourceMap: ( _production ) ? false : true,
+                //             }
+                //         },
+                //         {
+                //             loader: 'postcss-loader',
+                //             options: {
+                //                 sourceMap: ( _production ) ? false : true,
+                //                 plugins: [
+                //                     require('autoprefixer')({
+                //                         remove: false,
+                //                         browsers: ['last 50 versions']
+                //                     })
+                //                 ]
+                //             }
+                //         },
+                //         {
+                //             loader: 'sass-loader',
+                //             options: {
+                //                 sourceMap: ( _production ) ? false : true
+                //             }
+                //         }
+                //     ]
+                // })
             },
             {
                 test: /\.vue$/,
@@ -88,7 +121,12 @@ const webpackConfig = {
         }
     },
     plugins: [
-        new ExtractTextPlugin('assets/css/main.css')
+        new VueLoaderPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "assets/css/[name].css",
+            chunkFilename: "[id].css"
+        }),
+        // new ExtractTextPlugin('assets/css/main.css')
     ]
 };
 
