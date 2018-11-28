@@ -1,17 +1,16 @@
+const fs = require('fs');
 const path = require('path');
-const webpack = require("webpack");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const _production = ( process.env.NODE_ENV === 'production' ) ? true : false;
 
 
 const webpackConfig = {
-    mode: 'development',
-    cache: true,
-    devtool: 'source-map',
+    mode: ( _production ) ? 'production' : 'development',
+    devtool: ( _production ) ? 'none' : 'source-map',
     entry: ['./src/common.js', './src/scss/main.scss'],
     output: {
         path: path.resolve(__dirname, './src'),
@@ -34,7 +33,7 @@ const webpackConfig = {
                 use: ['babel-loader']
             },
             {
-                test: /main\.scss/,
+                test: /\.scss$/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader
@@ -42,59 +41,29 @@ const webpackConfig = {
                     {
                         loader: 'css-loader',
                         options: {
-                            sourceMap: true
+                            url: false,
+                            sourceMap: ( _production ) ? false : true,
                         }
                     },
-                    // {
-                    //     loader: 'postcss-loader',
-                    //     options: {
-                    //         plugins: [
-                    //             require("autoprefixer")({
-                    //                 browsers: ["ie >= 10", "last 50 version"]
-                    //             })
-                    //         ]
-                    //     }
-                    // },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: ( _production ) ? false : true,
+                            plugins: [
+                                require('autoprefixer')({
+                                    remove: false,
+                                    browsers: ['ie >= 10', 'last 50 versions']
+                                })
+                            ]
+                        }
+                    },
                     {
                         loader: 'sass-loader',
                         options: {
-                            sourceMap: true
+                            sourceMap: ( _production ) ? false : true
                         }
                     }
-                ],
-                // use: MiniCssExtractPlugin.loader,
-
-                // use: ExtractTextPlugin.extract({
-                //     fallback: 'style-loader',
-                //     use: [
-                //         {
-                //             loader: 'css-loader',
-                //             options: {
-                //                 url: false,
-                //                 minimize: ( _production ) ? true : false,
-                //                 sourceMap: ( _production ) ? false : true,
-                //             }
-                //         },
-                //         {
-                //             loader: 'postcss-loader',
-                //             options: {
-                //                 sourceMap: ( _production ) ? false : true,
-                //                 plugins: [
-                //                     require('autoprefixer')({
-                //                         remove: false,
-                //                         browsers: ['last 50 versions']
-                //                     })
-                //                 ]
-                //             }
-                //         },
-                //         {
-                //             loader: 'sass-loader',
-                //             options: {
-                //                 sourceMap: ( _production ) ? false : true
-                //             }
-                //         }
-                //     ]
-                // })
+                ]
             },
             {
                 test: /\.vue$/,
@@ -104,7 +73,7 @@ const webpackConfig = {
                         options: {
                             postcss: [require('autoprefixer')({
                                 remove: false,
-                                browsers: ['last 50 versions']
+                                browsers: ['ie >= 10', 'last 50 versions']
                             })]
                         }
                     },
@@ -117,30 +86,42 @@ const webpackConfig = {
     },
     resolve: {
         alias: {
+            '@': path.resolve(__dirname, 'src'),
+            '@js': path.resolve(__dirname, 'src/js'),
+            '@components': path.resolve(__dirname, 'src/components'),
             'vue$': 'vue/dist/vue.esm.js'
         }
     },
     plugins: [
         new VueLoaderPlugin(),
         new MiniCssExtractPlugin({
-            filename: "assets/css/[name].css",
-            chunkFilename: "[id].css"
-        }),
-        // new ExtractTextPlugin('assets/css/main.css')
+            filename: 'assets/css/[name].css',
+        })
     ]
 };
 
 
 // Production
 if ( _production ) {
-    webpackConfig.plugins = ( webpackConfig.plugins || [] ).concat([
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('production')
+    // clear
+    const clearFiles = ['./src/assets/js/common.js.map', './src/assets/css/main.css.map'];
+    for (let file of clearFiles) {
+        fs.unlink( path.resolve(__dirname, file), (err) => {
+            if (err) {
+                console.log(`${file} was not deleted`);
+                return;
             }
-        }),
-        new webpack.optimize.UglifyJsPlugin()
-    ])
-}
+            console.log(`${file} was deleted`);
+        })
+    };
 
-module.exports = webpackConfig
+    // add production config
+    webpackConfig.optimization = {
+        minimizer: [
+            new UglifyJsPlugin(),
+            new OptimizeCSSAssetsPlugin({})
+        ]
+    };
+};
+
+module.exports = webpackConfig;

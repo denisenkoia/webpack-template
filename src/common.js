@@ -7,10 +7,10 @@ import '@babel/polyfill';
 import './js/_newScript';
 
 
-
 // require app component
 import Vue from 'vue';
 import App from './components/app.vue';
+
 
 new Vue({
     el: '#app',
