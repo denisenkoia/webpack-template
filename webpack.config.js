@@ -89,6 +89,7 @@ const webpackConfig = {
 			'@': path.resolve(__dirname, 'src'),
 			'@js': path.resolve(__dirname, 'src/js'),
 			'@components': path.resolve(__dirname, 'src/components'),
+			'@store': path.resolve(__dirname, 'src/store'),
 			'vue$': 'vue/dist/vue.esm.js'
 		}
 	},
