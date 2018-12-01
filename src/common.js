@@ -8,7 +8,7 @@ import '@js/newScript.js';
 
 // require app
 import Vue from 'vue';
-import App from '@components/app.vue';
+import App from '@components/App.vue';
 import Store from '@store/store.js';
 
 new Vue({
