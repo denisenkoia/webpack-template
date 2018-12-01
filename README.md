@@ -3,6 +3,8 @@
 ### Stack ###
 
 * Vue
+* Vuex
+* Vue-router
 * @babel/polyfill
 * markup-inline-loader ( https://github.com/asnowwolf/markup-inline-loader )
 
