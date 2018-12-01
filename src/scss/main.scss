@@ -2,11 +2,8 @@
 @import "default/mixins";
 @import "default/normalize";
 @import "default/fonts";
-// @import "default/default";
-
-
-// page components
-@import "components/app";
+@import "default/default";
 
 
 // components
+@import "components/app";

@@ -1,38 +1,19 @@
 <template>
-    <div id="app" class="app">
-
-        <div class="block">
-            <div class="container block-wrapper">
-                <div>Hello App</div>
-            </div>
-        </div>
-
-    </div>
+	<div id="app" class="app">
+		<h1>Hello App</h1>
+	</div>
 </template>
 
 
-
 <script>
-	
-export default {
-    data() {
-        return {
-            
-        }
-    },
-    computed: {
-
-    },
-    methods: {
-        
-    },
-    created() {
-        
-    },
-    mounted() {
-        console.log("Test")
-        
-    }
-}
-
+	export default {
+		name: "App",
+		data() {
+			return {};
+		},
+		computed: {},
+		methods: {},
+		created() {},
+		mounted() {}
+	};
 </script>

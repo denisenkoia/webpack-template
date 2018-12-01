@@ -2,19 +2,17 @@
 import '@babel/polyfill';
 
 
-
 // require scripts
-import './js/_newScript';
+import '@js/newScript';
 
 
-// require app component
+// require app
 import Vue from 'vue';
-import App from './components/app.vue';
-
+import App from '@components/app.vue';
 
 new Vue({
-    el: '#app',
-    render: (createElement) => {
-        return createElement(App);
-    }
+	el: '#app',
+	render: (createElement) => {
+		return createElement(App);
+	}
 });

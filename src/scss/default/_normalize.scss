@@ -10,56 +10,56 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, figure,
 figcaption, footer, header, hgroup, menu, nav, output,
 ruby, section, summary, time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font-family: inherit;
-  font: inherit;
-  color: inherit;
-  vertical-align: baseline;
-  line-height: 1;
+  	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font-family: inherit;
+	font: inherit;
+	color: inherit;
+	vertical-align: baseline;
+	line-height: 1;
 }
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section, main {
-  display: block;
+  	display: block;
 }
 
 ol, ul {
-  list-style: none;
+  	list-style: none;
 }
 
 blockquote, q {
-  quotes: none;
-  &:before, &:after {
-    content: '';
-    content: none;
-  }
+	quotes: none;
+	&:before, &:after {
+		content: '';
+		content: none;
+	}
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 * {
-  text-decoration: none;
-  box-sizing: border-box;
-  &:before, &:after {
-    box-sizing: border-box;
-  }
+	text-decoration: none;
+	box-sizing: border-box;
+	&:before, &:after {
+		box-sizing: border-box;
+	}
 }
 
 a {
-  text-decoration: none;
-  &:link, &:active, &:visited {
-    text-decoration: none;
-  }
+	text-decoration: none;
+	&:link, &:active, &:visited {
+		text-decoration: none;
+	}
 }
 
 button {
-  background: none;
-  border: none;
-  outline: none;
+	background: none;
+	border: none;
+	outline: none;
 }
